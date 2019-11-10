@@ -1,0 +1,22 @@
+{% extends "master.html" %}
+
+{% block content %}
+<div class="container">
+<div class=" row justify-content-around">
+    {% for x in data %}
+    <div class="card col-sm-5" style="background: inherit;">
+        <img class="card-img-top img-fluid rounded" src="{{url_for('static', filename = 'img/Movies/'+x[7])}}" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">{{x[1]}}</h5>
+          <p class="card-text" style="text-transform: capitalize;">Languages: {{x[2]}}<br>
+          Genes: {{x[3]}}<br>
+          Run time: {{x[4]}}<br>  
+          Rating: {{x[5]}}<br></p>
+          <p style="text-align: justify; text-justify: inter-word;">{{x[9]}}</p>
+        </div>
+        <a href="{{url_for('book_now',id=x[0])}}" class="btn btn-success">Book Now</a>
+    </div>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}

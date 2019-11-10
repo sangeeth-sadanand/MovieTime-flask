@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <title>
+            Movie Time - Book Ticket
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href= "{{ url_for('static', filename = 'css/additional.css')}}"/>
+        <link rel="stylesheet" href = "{{ url_for('static', filename = 'css/bootstrap.css')}}" />
+        <script type = "text/javascript" src= "{{ url_for('static', filename = 'script/jquery.min.js')}}" ></script>
+        <script type = "text/javascript" src= "{{ url_for('static', filename = 'script/popper.min.js')}}" ></script>
+        <script type = "text/javascript" src= "{{ url_for('static', filename = 'script/bootstrap.js')}}"></script>
+        <link rel="icon" href="{{ url_for('static', filename = 'img/app/favicon.ico')}}" type="image/x-icon"/>
+        <link rel="shortcut icon" href="{{ url_for('static', filename = 'img/app/favicon.ico')}}" type="image/x-icon"/>
+        <script>
+        var selected_seat = [];
+        function enable_proceed(){
+            var no_of_seat = document.getElementById("seat").value;
+            var len_selected_seat = selected_seat.length;
+            if (no_of_seat == len_selected_seat)
+            {
+                document.getElementById('submit').disabled = false;
+            }
+            else
+            {
+                document.getElementById('submit').disabled = true;
+            }
+        }
+        function checkseat(seat)
+        {  
+            var xmlHttp;
+                try
+                    {    // Firefox, Opera 8.0+, Safari    
+                        xmlHttp=new XMLHttpRequest();    
+                    }
+                catch (e)
+                    {    // Internet Explorer    
+                        try
+                        {      
+                            xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");   
+                        }
+                        catch (e)
+                        {      
+                            try
+                            {        
+                                xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");        
+                            }
+                            catch (e)
+                            {        
+                                alert("Your browser does not support AJAX!");        
+                                return false;        
+                            }      
+                        }    
+                    }
+            if (selected_seat.includes(seat))
+                {
+                    xmlHttp.onreadystatechange=function()
+                    {
+                    if(xmlHttp.readyState==4)
+                        {
+                            var response = xmlHttp.responseText.trim();
+                            if (response ='true')
+                            {
+                                selected_seat.splice(selected_seat.indexOf(seat),1);
+                                document.getElementById(seat).classList.remove('checking');
+                                document.getElementById(seat).classList.remove('selected')
+                                document.getElementById(seat).classList.add('available');
+                                document.getElementById('selected_seat').value = selected_seat.toString();
+                                enable_proceed()
+                            }
+                        }
+                    }
+                    
+                    var show_id = document.getElementById('show_id').value;
+                    xmlHttp.open("GET",'/ajax/seat_unselect?show_id='+show_id+'&seat='+seat,true);
+                    xmlHttp.send(null);
+                }
+            else{
+                document.getElementById(seat).classList.add('checking');
+                document.getElementById(seat).classList.remove('available');
+                    xmlHttp.onreadystatechange=function()
+                    {
+                    if(xmlHttp.readyState==4)
+                        {
+                            var response = xmlHttp.responseText.trim();
+                            document.getElementById(seat).classList.remove('checking');
+                            if (response == 'true')
+                            {
+                                document.getElementById(seat).classList.add('selected');
+                                selected_seat.push(seat);
+                                document.getElementById('selected_seat').value = selected_seat.toString();
+                                enable_proceed()
+                            }
+                            else
+                            {
+                                document.getElementById(seat).classList.add('temp-occupied');
+                                document.getElementById('selected_seat').value = selected_seat.toString();
+                                enable_proceed()
+                            }
+                            
+                        }
+                    }
+                    
+                    var show_id = document.getElementById('show_id').value;
+                    xmlHttp.open("GET",'/ajax/seat_select?show_id='+show_id+'&seat='+seat,true);
+                    xmlHttp.send(null);  
+            }
+        }
+        </script>
+    </head>
+    <body>
+        <div class="container" style="margin-top: 20px;">
+            <form method = "POST">
+                <input type="hidden" name = "show_id" id="show_id" value = {{data['show_id']}}> 
+                <input type ="hidden" name = "selected_seats" id ="selected_seat" value="">
+                <div class="row justify-content-center">
+                    <div class="col-md">Movie:&nbsp;<b>{{data['movie_name']}}</b></div>
+                    <div class="col-md">Date:&nbsp;<b>{{data['date']}}</b></div>
+                    <div class="col-md">Time:&nbsp;<b>{{data['time']}}</b></div>
+                    <div class="col-md">
+                        <label for="seat" class ="form-control-label">Seat:</label> 
+                        <select class = "form-control-sm" name = "seat" id ="seat" style="background: inherit" onchange="enable_proceed()">
+                            <option value = "0" selected>SELECT</option>
+                            {% for x in range(1,11) %}
+                                <option value = "{{x}}" ><b>{{x}}</b></option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <br>
+<!---------------------------------PLATINUM SEATS--------------------------------------------------->
+            <div style = "display: flex;justify-content:center ; border: 2px solid #919090; padding : 10px auto; border-radius: 10px; background-color: #c5c5d8;">
+                    <div class="table-responsive-center">
+                    <table class="table-sm">
+                        <tr>
+                            <td colspan="2">Platinum &nbsp; &nbsp; Cost:&nbsp;{{data['plat']}}</td>
+                        </tr>
+                            {% for x in screen_data['plat'] %}
+                        <tr>
+                            <td class="noseat">{{x}}</td>
+                            <td class="d-flex flex-wrap"> 
+                                {% for y in screen_data[x] %}
+                                    {% if x+y in unavilable_seats %}
+                                        <div class = "p occupied">{{y}}</div>
+                                    {% elif y == "0"%} 
+                                        <div class ="p noseat"></div>
+                                    {% else %}
+                                        <a href = "javascript:;" onclick ="checkseat('{{x+y}}')"><div id = "{{x+y}}" class = "p available">{{y}}</div></a>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                            {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <br>
+<!---------------------------------GOLD SEATS--------------------------------------------------->
+            <div style = "display: flex;justify-content:center ; border: 2px solid #fcc256; padding : 10px auto; border-radius: 10px; background-color: #f1dfa1;">
+                    <div class="table-responsive-center">
+                    <table class="table-sm">
+                        <tr>
+                            <td colspan="2">Gold &nbsp; &nbsp; Cost:&nbsp;{{data['gold']}}</td>
+                        </tr>
+                            {% for x in screen_data['gold'] %}
+                        <tr>
+                            <td class="noseat">{{x}}</td>
+                            <td class="d-flex flex-wrap"> 
+                                {% for y in screen_data[x] %}
+                                    {% if x+y in unavilable_seats %}
+                                        <div class = "p occupied">{{y}}</div>
+                                    {% elif y == "0"%} 
+                                        <div class ="p noseat"></div>
+                                    {% else %}
+                                        <a href = "javascript:;" onclick ="checkseat('{{x+y}}')"><div id = "{{x+y}}" class = "p available">{{y}}</div></a>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                            {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <br>
+<!---------------------------------Silver SEATS--------------------------------------------------->
+            <div style = "display: flex;justify-content:center ; border: 2px solid #a7a7a7; padding : 10px auto; border-radius: 10px; background-color: #e8e7e5;">
+                    <div class="table-responsive-center">
+                    <table class="table-sm">
+                        <tr>
+                            <td colspan="2">Silver &nbsp; &nbsp; Cost:&nbsp;{{data['silv']}}</td>
+                        </tr>
+                            {% for x in screen_data['silv'] %}
+                        <tr>
+                            <td class="noseat">{{x}}</td>
+                            <td class="d-flex flex-wrap"> 
+                                {% for y in screen_data[x] %}
+                                    {% if x+y in unavilable_seats %}
+                                        <div class = "p occupied">{{y}}</div>
+                                    {% elif y == "0"%} 
+                                        <div class ="p noseat"></div>
+                                    {% else %}
+                                        <a href = "javascript:;" onclick ="checkseat('{{x+y}}')"><div id = "{{x+y}}" class = "p available">{{y}}</div></a>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                            {% endfor %}
+                    </table>
+                </div>
+            </div>
+<!-----------------------------------------------------Screen--------------------------------------------->
+            <div style = "display: flex;justify-content:center ; border: 2px solid #f7f4f4;
+             padding : 10px auto; border-radius: 10px; background-color: #000000; color: white">
+            SCREEN
+            </div>
+            <br>
+            <center><input class="btn btn-success" type="submit" id ="submit" value ="Proceed" disabled></center>
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,54 @@
+{% extends "master.html" %}
+{% block head %}
+<style type="text/css">
+    @media print
+    {
+    body * { visibility: hidden; }
+    .printcontent * { visibility: visible; }
+    .printcontent { position: absolute; top: 0px; left: 0px; }
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class=" row justify-content-around">
+            {% for x in data %}
+            <div class="card col-sm-8 printcontent" style="background: inherit;">
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    viewBox="0 0 708 316.3" enable-background="new 0 0 708 316.3" xml:space="preserve">
+                    <g>
+                        <rect x="2" y="1.7" fill="#8B0007" stroke="#000000" stroke-miterlimit="10" width="708" height="314.7"/>
+                        <g>
+                            <defs>
+                                <path id="SVGID_1_" d="M20.8,66C48.5,66,71,44,70.8,16c286.6,0,573,0,573,0c-0.2,27,21.8,49.8,49.8,49.9c0,13.6,0,182.1,0,182.1
+                                    s0,0.5,0,1.2c-28,0-50,22.8-49.8,50.8c0,0-286.4,0-573,0c0.2-29-22.2-50.7-50.2-50.7c0-0.2,0,1,0,1V67"/>
+                            </defs>
+                            <clipPath id="SVGID_2_">
+                                <use xlink:href="#SVGID_1_"  overflow="visible"/>
+                            </clipPath>
+                            <linearGradient id="SVGID_3_" gradientUnits="userSpaceOnUse" x1="9.5742" y1="157.7257" x2="704.5109" y2="157.7257">
+                                <stop  offset="0" style="stop-color:#F1F9B5"/>
+                                <stop  offset="1" style="stop-color:#FFFFD3"/>
+                            </linearGradient>
+                            
+                                <rect x="9.6" y="0.4" clip-path="url(#SVGID_2_)" fill="url(#SVGID_3_)" stroke="#000000" stroke-miterlimit="10" width="694.9" height="314.6"/>
+                        </g>
+                        <text transform="matrix(0.7173 -0.7173 0.7071 0.7071 46.7089 136.3481)"><tspan x="0" y="0" font-family="'SimSun-ExtB'" font-size="52.7787">MOVIE</tspan><tspan x="13.2" y="63.3" font-family="'SimSun-ExtB'" font-size="52.7787">TIME</tspan></text>
+                        <rect x="22.3" y="169.7" width="666" height="6.7"/>
+                        <rect x="181.6" y="18.3" width="6.6" height="155.3"/>
+                    </g>
+                    <text transform="matrix(0.7554 0 0 1 212.048 72.2598)" font-family="'TimesNewRomanPSMT'" font-size="48">{{x[0]}}</text>
+                    <text x="370" y="208.6665" dominant-baseline="middle" text-anchor="middle" font-family="'TimesNewRomanPSMT'" font-size="24">SCREEN {{x[4]}}</text>
+                    <text transform="matrix(2.1246 0 0 1 216.7152 118.6665)" font-family="'TimesNewRomanPSMT'" font-size="18">{{x[1]}} &amp; {{x[2]}}</text>
+                    <text transform="matrix(2.1246 0 0 1 215.7754 154.6668)" font-family="'TimesNewRomanPSMT'" font-size="18">Price &#8377;{{x[3]}}</text>
+                    <text x="370.474" y="242.8605" dominant-baseline="middle" text-anchor="middle" font-family="'SimSun-ExtB'" font-size="28">{{x[5]}}</text>
+                    <text x ="370.1374" y="279.3333" dominant-baseline="middle" text-anchor="middle" font-family="'TimesNewRomanPSMT'" font-size="21">Ticket No. {{x[6]}}</text>
+               </svg>
+            </div>
+            <button class="btn-success" onclick="window.print();">Print</button>  
+
+            {% endfor %}
+        </div>
+</div>
+
+{% endblock %}

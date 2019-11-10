@@ -1,0 +1,23 @@
+{% extends "master.html" %}
+
+{% block content %}
+<div class="container">
+        <h2>Add Staff</h2>
+        <form class = "form-horizontal" method = 'POST'>
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">user id:</label>
+                <div class="col-sm-4">
+                    <input type="email" class="form-control" name = 'user_id' id="name" placeholder="User id"required>
+                </div>
+           
+                <div class="col-sm-2">
+                    <input class = 'btn btn-dark' id = 'button' type = 'submit' value='Proceed'>  
+                </div>
+            </div>
+            
+        </form>
+        {% if message%}
+            <div class="row text-danger">Username invalid</div>
+        {% endif %} 
+</div>
+{% endblock %}

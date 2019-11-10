@@ -1,0 +1,124 @@
+{% extends "master.html" %}
+{% block content %}
+<div class="container">
+	<div class="py-5 text-center">
+		<img class="d-block mx-auto mb-4" src="{{ url_for('static', filename = 'img/app/movietime_logo.png')}}" alt="" width="100" height = "95">
+		<h2>Checkout</h2>
+		<p class="lead"></p>
+	</div>
+
+	<div class="row">
+		<div class="col-md-4 order-md-2 mb-4">
+			<h4 class="d-flex justify-content-between align-items-center mb-3">
+				<span class="text-muted">Ticket summary</span>
+				<span class="badge badge-secondary badge-pill">{{session.get('ticket_data')['no_of_seats']}}</span>
+			</h4>
+			<ul class="list-group mb-3">
+				<li class="list-group-item d-flex justify-content-between lh-condensed">
+					<div>
+						<h6 class="my-0">{{session.get('ticket_data')['movie_name']}}</h6>
+						<small class="text-black">Time: {{session.get('ticket_data')['time'][:4]}}</small>
+					</div>
+					<span class="text-black">Date: {{session.get('ticket_data')['date']}}</span>
+				</li>
+
+				<li class="list-group-item d-flex justify-content-between lh-condensed">
+					<div>
+						<h6 class="my-0">Platinum </h6>
+						<small class="text-muted">Number of seats: {{session.get('bill_data')[0][0]}}</small>
+					</div>
+					<span class="text-muted">&#8377;{{session.get('bill_data')[0][2]}}</span>
+				</li>
+
+				<li class="list-group-item d-flex justify-content-between lh-condensed">
+					<div>
+						<h6 class="my-0">Gold </h6>
+						<small class="text-muted">Number of seats: {{session.get('bill_data')[1][0]}}</small> 
+					</div>
+					<span class="text-muted">&#8377;{{session.get('bill_data')[1][2]}}</span>
+				</li>
+
+				<li class="list-group-item d-flex justify-content-between lh-condensed">
+					<div>
+						<h6 class="my-0">Silver </h6>
+						<small class="text-muted">Number of seats: {{session.get('bill_data')[2][0]}}</small>
+					</div>
+					<span class="text-muted">&#8377;{{session.get('bill_data')[2][2]}}</span>
+				</li>
+
+				<li class="list-group-item d-flex justify-content-between lh-condensed">
+					<div>
+						<h6 class="my-0">Total</h6>
+						<small class="text-muted">Seats: {{session.get('ticket_data')['selected_seats']}}</small>
+					</div>
+					<span class="text-muted">&#8377;{{session.get('bill_data')[3][0]}}</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between bg-light">
+					<div class="text-success">
+						<h6 class="my-0">GST@18%</h6>
+						<small>(CGST@9% + SGST@9%)  </small>
+					</div>
+					<span class="text-success">&#8377;{{session.get('bill_data')[3][1]}}</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between">
+					<span>Grand total</span>
+					<strong>&#8377;{{session.get('bill_data')[3][2]}}</strong>
+				</li>
+			</ul>
+
+			<div class="card p-2">
+				Note:<br>
+				<ol>
+					<li>Ticket once booked cannot be cancelled or refunded.</li>
+					<li>In case of Credit card/ Debit card booking. Card holder must be present at the ticket counter while collecting ticket</li>
+				</ol>
+			</div>
+		</div>
+		
+		<div class="col-md-8 order-md-1">
+			<h4 class="mb-3">Payment</h4>
+			<small class="bg-danger text-white">
+				This is demo purpose payment option. Please do not enter actual card detail.<br/>
+				The site designer is not responsible for any kind of mal-practice using this payment option.
+			</small>
+			<form method="POST">
+				<div class="row">
+					<div class="col-md-6 mb-3">
+						<label for="cc-name">Name on card</label>
+						<input type="text" class="form-control" name="card_holder_name" id="cc-name" placeholder="" required="">
+						<small class="text-muted">Full name as displayed on card</small>
+						<div class="invalid-feedback">
+							Name on card is required
+						</div>
+					</div>
+					<div class="col-md-6 mb-3">
+						<label for="cc-number">Credit card number</label>
+						<input type="text" class="form-control" name="card_number" id="cc-number" placeholder="" required="">
+						<div class="invalid-feedback">
+							Credit card number is required
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3 mb-3">
+						<label for="cc-expiration">Expiration</label>
+						<input type="text" class="form-control" name ="expiration"  id="cc-expiration" pattern="^[0-1][0-9]-[0-9][0-9]?$" placeholder="MM-YY" required="">
+						<div class="invalid-feedback">
+							Expiration date required
+						</div>
+					</div>
+					<div class="col-md-3 mb-3">
+						<label for="cc-cvv">CVV</label>
+						<input type="password" class="form-control" name = "cvv" pattern="[0-9][0-9][0-9]" id="cc-cvv" placeholder="" required="">
+						<div class="invalid-feedback">
+							Security code required
+						</div>
+					</div>
+				</div>
+				<hr class="mb-4">
+				<input type="submit" value="Proceed" class="btn btn-primary btn-lg btn-block">
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

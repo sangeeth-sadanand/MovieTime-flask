@@ -1,0 +1,101 @@
+footer {
+    background-color: #eee;
+    padding-top: 15px;
+    padding-left: 15px;
+}
+body {
+    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(220,217,249,1) 0%, rgba(172,224,217,1) 89.8% );
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: auto;
+}
+/* Popup container */
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  /* The actual popup (appears on top) */
+  .popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+  }
+  
+  /* Popup arrow */
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  
+  /* Toggle this class when clicking on the popup container (hide and show the popup) */
+  .popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+  }
+  
+  /* Add animation (fade in the popup) */
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }
+
+  .temp-occupied,
+  .available,
+  .noseat,
+  .checking,
+  .occupied,
+  .selected{
+    text-align: center;
+    border-radius: 0.2vmax;
+    width: 2vmax;
+    height: 2vmax;
+    font-size: 1.3vmax;
+    padding:auto;
+    margin:1px;
+    }
+  .available,
+  .available:hover{
+    border-radius: 0.5vw;
+    background-color: #eee;
+    border: 0.1vw solid rgb(247, 247, 247);
+    color:green;
+  }
+  .occupied{
+    background-color: rgb(119, 119, 119);
+    color: red;
+  }
+  .selected{
+    background-color: #aef59c;
+    color: black;
+  }
+  .temp-occupied{
+    background-color: rgb(255, 102, 102);
+    color: black;
+  }
+  .checking{
+    background-color: rgb(157, 163, 255);
+    color: rgb(0, 0, 0);
+  }

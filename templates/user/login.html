@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Movie Time - Login</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href = "{{ url_for('static', filename = 'css/bootstrap.min.css')}}" />
+        <script type = "text/javascript" src= "{{ url_for('static', filename = 'script/jquery.min.js')}}" ></script>
+        <script type = "text/javascript" src= "{{ url_for('static', filename = 'script/popper.min.js')}}" ></script>
+        <script type = "text/javascript" src= "{{ url_for('static', filename = 'script/bootstrap.min.js')}}"></script>
+        <link rel="icon" href="{{ url_for('static', filename = 'img/app/favicon.ico')}}" type="image/x-icon"/>
+        <link rel="shortcut icon" href="{{ url_for('static', filename = 'img/app/favicon.ico')}}" type="image/x-icon"/>
+        <script>
+                $(document).ready(function(){
+                    setTimeout(function(){
+                        $(".toast").toast('show');
+                    }, 1000);
+                    
+                });
+        </script>
+        <style>
+            body {
+                background: #999;
+                padding: 40px;
+                font-family: "Open Sans Condensed", sans-serif;
+            }
+
+            #bg {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: url("{{ url_for('static', filename = 'img/app/login-bg.png')}}");
+                background-size: cover;
+            }
+            .login-box {
+                position: relative;
+                width: 90%;
+                max-width: 450px;
+                margin: 50px auto;
+                background: rgba(0,0,0,.6);
+                padding: 20px;
+                border: 1px solid;
+                border-top-color: rgba(255,255,255,.4);
+                border-left-color: rgba(255,255,255,.4);
+                border-bottom-color: rgba(60,60,60,.4);
+                border-right-color: rgba(60,60,60,.4);
+            }
+            .img-logo{
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 30%;
+            }
+            .form-control,
+            .form-control:enabled,
+            input:-internal-autofill-selected,
+            #passwd,
+            #username{
+                background-color: rgba(0,0,0,.0);
+                border: none;
+                color:cyan;
+            }
+            @keyframes animate {
+                0%{background-position:0% 50%}
+                50%{background-position:100% 50%}
+                100%{background-position:0% 50%}
+            }
+            .home_btn{
+                position: fixed;
+                left: 20px;
+                top: 20px;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div id = "bg" >
+            <div class="home_btn"><a href = "{{url_for('home')}}">HOME</a></div>
+            <div class="login-box">
+                <img src="{{ url_for('static', filename = 'img/app/movietime_logo.png')}}" alt="" class="img-logo"><br>
+                {% block content %}
+                <form class="form-horizontal" method ='POST'>
+                    <div class="form-group row">
+                    <label for="username" class = "col col-form-label col-4 text-white">Username:</label>
+                    <input type="email" class="col form-control col-lg" name="username" id = "username" placeholder="email-id" required>
+                    </div>
+                    <br/>
+                    <div class="form-group row">
+                    <label for="passwd" class = "col-4 col-form-label text-white">Password:</label>
+                    <input type="password" class="form-control col" name="passwd" id = "passwd" placeholder="password" required>
+                    </div>
+                    <br>
+                    <div class="form-group row">
+                        <input type="submit" name = "submit" class ="btn btn-success col" value = "Login">
+                    </div>
+                    <br/>
+                    <div class="row form-group">
+                        <div class="col-6 col-form-control s" ><a href ="{{url_for('register_user')}}">Create a new account</a></div>
+                        <div class="col-6 col-form-control s"><a href ="{{url_for('forgot_password')}}">Forgot password</a></div>
+                    </div>
+                </form>
+                {% endblock %}
+            </div>
+        </div>
+        <div aria-live="polite" aria-atomic="true" style="position: absolute; bottom:0; right: 20px;min-width:300px; min-height: 200px;">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for cat,message in messages %}
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay ="5000">
+            
+                {% if cat == 'error' %}
+                <div class="toast-header  bg-dark">
+                <strong class="mr-auto text-danger">Error</strong>
+                {% elif cat == 'success' %}
+                <div class="toast-header  bg-dark">
+                <strong class="mr-auto text-success bg-dark">Success</strong>
+                {% else %}
+                <div class="toast-header  bg-dark">
+                <strong class="mr-auto text-info bg-dark">Message</strong>
+                {% endif %}
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true" class = "text-white">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                {{message}}
+            </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+    
+    </body>
+</html>

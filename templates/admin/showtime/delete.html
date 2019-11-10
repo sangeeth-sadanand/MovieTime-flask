@@ -1,0 +1,36 @@
+{%extends 'master.html'%}
+
+{% block content %}
+<div class="container">
+        <div class="card text-center bg-secondary">
+            <div class="card-header text-warning">
+                <b>Delete show time</b>
+            </div>
+            <div class="card-body text-white text-center">
+                <div class="row">
+                    <div class="col">
+                            Show id: {{data[2]}}
+                    </div>
+                    <div class="col">
+                            Movie name(language): {{data[3]}} ({{data[4]}})
+                    </div>
+                    <div class="col">
+                        Time: {{data[0]}}-{{data[1]}}
+                    </div>
+                </div>
+                </div>
+                <br>
+                <p class="card-text text-white">Are you sure you want to delete movie {{data['name']}} from list? </p>
+                <form method ="POST">
+                    <input class="btn btn-success" type="submit" value="Yes" name="action"/>
+                    <input class="btn btn-danger" type="submit" value="No" name="action"/>
+                    <input type ="hidden" name = id value = {{data['id']}}>
+                </form>
+            </div>
+            <div class="card-footer text-danger">
+                Note: Cannot undo once deleted.
+            </div>
+        </div>
+</div>
+
+{% endblock %}

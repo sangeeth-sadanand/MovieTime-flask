@@ -1,0 +1,119 @@
+{%extends 'master.html'%}
+
+{% block content %}
+<div class="container">
+        <h2>Edit movie {{data['name']}}</h2>
+        <form class = "form-horizontal" method = 'POST' enctype="multipart/form-data">
+            <input type ='hidden' name = 'id' value ={{data['id']}}>
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Name:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name = 'name' id="name" placeholder="Movie name"value = {{data['name']}} required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="language" class="col-sm-2 col-form-label">Language:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name = 'language' id="language" value = {{data['languages']}} placeholder="Available languages"required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="genes" class="col-sm-2 col-form-label">Genes:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name = 'genes' id="genes" value = {{data['genes']}} placeholder="Action, Drama, Sci-fi, etc." required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="runtime" class="col-sm-2 col-form-label">Run time:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name = 'runtime' id="runtime" value = {{data['runtime']}} placeholder="HH:MM" pattern="^0[0-4]:([0-5][0-9])?$" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="rating" class="col-sm-2 col-form-label">Rating:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name = 'rating' id="rating" pattern ="^([0-4].[0-9])|5.0?$" value = {{data['rating']}} placeholder="0.0-5.0 " required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="status" class="col-sm-2 col-form-label">Status:</label>
+                <div class="col-sm-10">
+                    <select class='form-control' name = 'status' id = 'status'>
+                        <option value = 1 {%if data['status'] == 1 %} selected {% endif%}>Coming soon</option>
+                        <option value = 0 {%if data['status'] == 0 %} selected {% endif%}>Now showing</option>
+                        <option value = 2 {%if data['status'] == 2 %} selected {% endif%}>Theatrical run over</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="date" class="col-sm-2 col-form-label">Release date:</label>
+                <div class="col-sm-10">
+                    <input type="Date" class="form-control" name = 'date' value = {{data['release_date']}} id="date" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="file" class="col-sm-2 col-form-label">Poster img:</label>
+                <div class="col-sm-10">
+                    <img id = "file_img" src="{{url_for('static', filename = 'img/Movies/'+data['filename'])}}" height= 50px alt='Image will be change after saving'><br>
+                    <input type="file" class="form-control-file" name = 'file' id="file"  onchange ="filesizecheck()">
+                    <input type='hidden' name = 'old_filename' value = '{{data['filename']}}'>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="description" class="col-sm-2 col-form-label">Description:</label>
+                <div class="col-sm-10">
+                    <textarea id = 'description' name = 'desc' maxlength="950" cols = 80 placeholder = "description" required onkeydown = "textlength()">{{data['desc']}}</textarea> 
+                    <br/><span id="chars">0</span> /950
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="button" class="col-sm-2 col-form-label">    </label>
+                <div class="col-sm-10">
+                    <input class = 'btn btn-dark' id = 'button' type = 'submit' value='Submit'>  
+                </div>
+            </div>
+            <input id = 'image_uploaded' name ='image_uploaded' type = 'hidden' value = "False">
+        </form> 
+</div>
+
+{% endblock %}
+
+
+{% block head %}
+<script type="text/javascript">
+    function filesizecheck()
+    {
+        var uploadfile = document.getElementById('file');
+        if ( ! /\.(jpe?g|png)$/i.test(uploadfile.value) )
+        {
+            alert('upload .jpg or .png file');
+            document.getElementById('file').value = '';
+        }
+        else
+        {
+            var filesize = document.getElementById('file').files[0].size;
+            if (filesize/1024 >1024){
+                alert('Large file size');
+                document.getElementById('file').value = '';
+            }
+            else 
+            {
+                document.getElementById('image_uploaded').value = 'True'
+                document.getElementById('file_img').src =''
+            }
+
+        }
+        
+        
+    }
+</script>
+<script type = "text/javascript">
+    function textlength()
+    {
+        var txtlength =document.getElementById('description').value.length;
+        var rem = (950 - txtlength);
+        document.getElementById('chars').textContent = txtlength
+    }
+</script>
+
+{% endblock %}

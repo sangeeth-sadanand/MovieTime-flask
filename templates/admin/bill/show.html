@@ -1,0 +1,76 @@
+{% extends "master.html" %}
+{% block content %}
+<div class="container">
+    <h2>Bill data</h2>  
+    <form class="form-inline row" method= "POST">
+        <label class="col-1">Date:</label>
+        <label class="col-1">from</label>
+        <input class="form-control col-2" type=date name=from required>
+        <label class="col-1">to</label>
+        <input class="form-control col-2" type=date name=to required>
+        <input class="form-control col-2" value="Filter" type="submit">
+    </form>
+    <br>
+    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+    
+    <br>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>Movie name</th>
+            <th>Language</th>
+            <th>Billed date and time</th>
+            <th>User id</th>
+            <th>Seats booked</th>
+            <th>Price</th>
+            <th>cgst</th>
+            <th>sgst</th>
+            <th>Total</th>
+            </tr>
+        </thead>
+        <tbody id="myTable">
+            {%for x in data%}
+            <tr>
+            <td>{{x[0]}}</td>
+            <td>{{x[1]}}</td>
+            <td>{{x[2]}}</td>
+            <td>{{x[3]}}</td>
+            <td>{{x[4]}}</td>
+            <td>{{x[5]}}</td>
+            <td>{{x[6]}}</td>
+            <td>{{x[7]}}</td>
+            <td>{{x[8]}}</td>
+            <td>{{x[9]}}</td>
+            </tr>
+            {%endfor%}
+            <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>SUM</td>
+                    <td>{{ttl[0]}}</td>
+                    <td>{{ttl[1]}}</td>
+                    <td>{{ttl[2]}}</td>
+                    <td>{{ttl[3]}}</td>
+            </tr>
+        </tbody>
+        
+        </table>
+    </div>
+    </div>
+    
+    <script>
+    $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    });
+    </script>
+{% endblock %}

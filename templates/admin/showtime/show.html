@@ -1,0 +1,249 @@
+{% extends "master.html"%}
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-center"> <h1> Date: {{data['today2']}} </h1> </div>
+    <div class="row">
+        <div class="col">
+            <h2>Screen 1</h2>
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                    <th>From time - To time</th>
+                    <th>show id</th>
+                    <th>Movie name (Language)</th>
+                    <th></th>
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+                {%for x in data['screen1_today2']%}
+                    <tr>
+                    <td>{{x[0]}} - {{x[1]}}</td>
+                    <td>{{x[2]}}</td>
+                    <td>{{x[3]}} ({{x[4]}})</td>
+                    <td>
+                        <input type="button" class="btn btn-warning" value="Edit" style="padding: 2px;" onclick="window.location.href='{{url_for('admin.admin_showtime_edit',id=x[2])}}'"/>
+                        <input type="button" class="btn btn-danger" value="Delete" style="padding: 2px;" onclick="window.location.href='{{url_for('admin.admin_showtime_delete',id=x[2])}}'"/>
+                        <!--<input type="button" class="btn btn-success" value="View detail" style="padding: 2px;" onclick="window.location.href='{{url_for('admin.admin_showtime_detail',id=x[2])}}'"/>-->
+                    </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+            <center>
+            <input type="button" class="btn btn-dark" value="Add"  onclick="window.location.href='{{url_for('admin.admin_showtime_add',screen=1)}}'"/>
+            </center>
+        </div>
+        <div class="col">
+            <h2>Screen 2</h2>
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>From time - To time</th>
+                    <th>show id</th>
+                    <th>Movie name (Language)</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="myTable">
+                {%for x in data['screen2_today2']%}
+                  <tr>
+                    <td>{{x[0]}} - {{x[1]}}</td>
+                    <td>{{x[2]}}</td>
+                    <td>{{x[3]}} ({{x[4]}})</td>
+                    <td>
+                            <input type="button" class="btn btn-warning" value="Edit" style="padding: 2px;" onclick="window.location.href='{{url_for('admin.admin_showtime_edit',id=x[2])}}'"/>
+                            <input type="button" class="btn btn-danger" value="Delete" style="padding: 2px;" onclick="window.location.href='{{url_for('admin.admin_showtime_delete',id=x[2])}}'"/>
+                            <!--<input type="button" class="btn btn-success" value="View detail" style="padding: 2px;" onclick="window.location.href='{{url_for('admin.admin_showtime_detail',id=x[2])}}'"/>-->
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+            <center>
+            <input type="button" class="btn btn-dark" value="Add"  onclick="window.location.href='{{url_for('admin.admin_showtime_add',screen=2)}}'"/>
+            </center>
+        </div>
+        <div class="col">
+            <h2>Screen 3</h2>
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                    <th>From time - To time</th>
+                    <th>show id</th>
+                    <th>Movie name (Language)</th>
+                    <th></th>
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+                {%for x in data['screen3_today2']%}
+                    <tr>
+                    <td>{{x[0]}} - {{x[1]}}</td>
+                    <td>{{x[2]}}</td>
+                    <td>{{x[3]}} ({{x[4]}})</td>
+                    <td>
+                        <input type="button" class="btn btn-warning" value="Edit" style="padding: 2px;" onclick="window.location.href='{{url_for('admin.admin_showtime_edit',id=x[2])}}'"/>
+                        <input type="button" class="btn btn-danger" value="Delete" style="padding: 2px;" onclick="window.location.href='{{url_for('admin.admin_showtime_delete',id=x[2])}}'"/>
+                        <!--<input type="button" class="btn btn-success" value="View detail" style="padding: 2px;" onclick="window.location.href='{{url_for('admin.admin_showtime_detail',id=x[2])}}'"/>-->
+                    </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+            <center>
+            <input type="button" class="btn btn-dark" value="Add"  onclick="window.location.href='{{url_for('admin.admin_showtime_add',screen=3)}}'"/>
+            </center>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center"> <h1> Date: {{data['today1']}} </h1> </div>
+    <div class="row">
+        <div class="col">
+            <h2>Screen 1</h2>
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                    <th>From time - To time</th>
+                    <th>show id</th>
+                    <th>Movie name (Language)</th>
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+                {%for x in data['screen1_today1']%}
+                    <tr>
+                    <td>{{x[0]}} - {{x[1]}}</td>
+                    <td>{{x[2]}}</td>
+                    <td>{{x[3]}} ({{x[4]}})</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="col">
+            <h2>Screen 2</h2>
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>From time - To time</th>
+                    <th>show id</th>
+                    <th>Movie name (Language)</th>
+                  </tr>
+                </thead>
+                <tbody id="myTable">
+                {%for x in data['screen2_today1']%}
+                  <tr>
+                    <td>{{x[0]}} - {{x[1]}}</td>
+                    <td>{{x[2]}}</td>
+                    <td>{{x[3]}} ({{x[4]}})</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="col">
+            <h2>Screen 3</h2>
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                    <th>From time - To time</th>
+                    <th>show id</th>
+                    <th>Movie name (Language)</th>
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+                {%for x in data['screen3_today1']%}
+                    <tr>
+                    <td>{{x[0]}} - {{x[1]}}</td>
+                    <td>{{x[2]}}</td>
+                    <td>{{x[3]}} ({{x[4]}})</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center"> <h1> Date: {{data['today']}} </h1> </div>
+    <div class="row">
+        <div class="col">
+            <h2>Screen 1</h2>
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                    <th>From time - To time</th>
+                    <th>show id</th>
+                    <th>Movie name (Language)</th>
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+                {%for x in data['screen1_today']%}
+                    <tr>
+                    <td>{{x[0]}} - {{x[1]}}</td>
+                    <td>{{x[2]}}</td>
+                    <td>{{x[3]}} ({{x[4]}})</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="col">
+            <h2>Screen 2</h2>
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>From time - To time</th>
+                    <th>show id</th>
+                    <th>Movie name (Language)</th>
+                  </tr>
+                </thead>
+                <tbody id="myTable">
+                {%for x in data['screen2_today']%}
+                  <tr>
+                    <td>{{x[0]}} - {{x[1]}}</td>
+                    <td>{{x[2]}}</td>
+                    <td>{{x[3]}} ({{x[4]}})</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <div class="col">
+            <h2>Screen 3</h2>
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                    <th>From time - To time</th>
+                    <th>show id</th>
+                    <th>Movie name (Language)</th>
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+                {%for x in data['screen3_today']%}
+                    <tr>
+                    <td>{{x[0]}} - {{x[1]}}</td>
+                    <td>{{x[2]}}</td>
+                    <td>{{x[3]}} ({{x[4]}})</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

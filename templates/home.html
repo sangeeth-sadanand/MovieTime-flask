@@ -1,0 +1,83 @@
+{% extends "master.html" %}
+{% block head%}
+<style>
+.img-p{
+    height: 50%;
+    max-height: 50vh;
+    margin:auto;
+}
+</style>
+{% endblock %}
+{% block content %}
+<br/>
+<div class="d-flex justify-content-center flex-row mb-3">
+        <div class="p-2 bd-highlight"><h1 class="text-black">Now showing</h1></div>
+</div>
+<a href="#" >
+<div id="myCarousel" class="carousel slide bg-inverse w-75 ml-auto mr-auto" data-ride="carousel">
+    <div class="carousel-inner" role="listbox">
+        {%set ns = namespace(initial = True) %}
+        {% for dt in data1 %}
+        {% if ns.initial == True %}
+        <div class="carousel-item active">
+        {% set ns.initial = False%}
+        {%else%}
+        <div class="carousel-item">
+        {%endif%}
+        <a href="{{url_for('now_showing')}}">
+            <img class="d-block img-p" src="{{url_for('static',filename = 'img/Movies/'+ dt[-1])}}" alt="First slide">
+            <div class="carousel-caption bg-dark" style ="opacity: 0.9;">
+            <h3 style ="opacity: 1;">{{dt[0]}}</h3>
+            <p style ="opacity: 1;">Language/s: {{dt[1]}}<br/>Genes: {{dt[2]}}</p>
+            </div>
+        </a>
+        </div>
+        {%endfor%}
+    </div>
+    <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+</a>
+<br/>
+
+<div class="d-flex justify-content-center flex-row mb-3">
+        <div class="p-2 bd-highlight"><h1 class="text-black">Coming soon</h1></div>
+</div>
+<a href="#">
+<div id="myCarousel" class="carousel slide bg-inverse w-75 ml-auto mr-auto" data-ride="carousel">
+    <div class="carousel-inner" role="listbox">
+        {%set ns = namespace(initial = True) %}
+        {% for dt in data2 %}
+        {% if ns.initial == True %}
+        <div class="carousel-item active">
+        {% set ns.initial = False%}
+        {%else%}
+        <div class="carousel-item">
+        {%endif%}
+        <a href="{{url_for('coming_soon')}}">
+        <img class="d-block img-p" src="{{url_for('static',filename = 'img/Movies/'+ dt[-1])}}" alt="First slide">
+            <div class="carousel-caption bg-dark" style ="opacity: 0.9;">
+            <h3 style ="opacity: 1;">{{dt[0]}}</h3>
+            <p style ="opacity: 1;">Language/s: {{dt[1]}}<br/>Genes: {{dt[2]}}</p>
+            </div>
+        </a>
+        </div>
+        {%endfor%}
+    </div>
+    <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+</a>
+{% endblock %}

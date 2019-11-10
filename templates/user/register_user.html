@@ -1,0 +1,117 @@
+{% extends 'user/login.html'%}
+{% block content %}
+<script type="text/javascript">
+var chk_pas = true
+var ckuname = true
+    function checkpassword(){
+        
+        var passwd = document.getElementById("passwd");
+        var passwd2 = document.getElementById("repasswd");
+        if ((passwd.value != passwd2.value)){
+            document.getElementById("passmsg").innerHTML = "Password does not match";
+            passwd2.classList.remove("is-valid");
+            passwd2.classList.add("is-invalid");
+            document.getElementById("submit").disabled =true
+            chk_pas =true
+        }
+        else{
+            document.getElementById("passmsg").innerHTML = " ";
+            passwd2.classList.remove("is-invalid");
+            passwd2.classList.add("is-valid");
+            if (ckuname == false){
+            document.getElementById("submit").disabled =false;}
+            chk_pas = false
+        }
+    }
+
+function checkusername()
+ {  
+   var username = document.getElementById("username").value;
+   var xmlHttp;
+   try
+    {    // Firefox, Opera 8.0+, Safari    
+        xmlHttp=new XMLHttpRequest();    
+    }
+  catch (e)
+    {    // Internet Explorer    
+        try
+      {      
+        xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");   
+      }
+    catch (e)
+      {      
+        try
+        {        
+            xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");        
+        }
+        catch (e)
+        {        
+            alert("Your browser does not support AJAX!");        
+            return false;        
+        }      
+      }    
+     }
+     xmlHttp.onreadystatechange=function()
+      {
+      if(xmlHttp.readyState==4)
+        {
+            var response = xmlHttp.responseText.trim();
+            if (response == "true")
+            {
+                document.getElementById("usermsg").innerHTML = " ";
+                document.getElementById("username").classList.remove("is-invalid")
+                document.getElementById("username").classList.add("is-valid");
+                if (chk_pas == false){
+                document.getElementById("submit").disabled =false;}
+                ckuname = false
+            }
+            else 
+            {
+                document.getElementById("usermsg").innerHTML = "User already exist try with another username";
+                document.getElementById("username").classList.remove("is-valid")
+                document.getElementById("username").classList.add("is-invalid");
+                document.getElementById("submit").disabled =true;
+                ckuname = true
+            }
+        }
+      }
+    xmlHttp.open("GET",'/ajax/email?email='+username ,true);
+    xmlHttp.send(null);  
+    }
+</script>
+
+
+<form class="form-horizontal" method="POST">
+    <div class="form-group row">
+    <label for="firstname" class = "col col-form-label col-4 text-white">First name:</label>
+    <input type="text" class="col form-control col-lg s" name="firstname" id = "firstname" placeholder="First name" required>
+    </div>
+    <div class="form-group row">
+        <label for="lastname" class = "col col-form-label col-4 text-white">Last name:</label>
+        <input type="text" class="col form-control col-lg s" name="lastname" id = "lastname" placeholder="Last name" required>
+    </div>
+    <div class="form-group row">
+        <label for="username" class = "col col-form-label col-4 text-white">Username:</label>
+        <div class = "col col-lg">
+            <input type="emailid" class="form-control s" style="padding: 0;" name="username" id = "username" placeholder="email-id" onfocusout="checkusername()" required>
+            <div id = "usermsg" style = "font-size: 12px; color: red;"></div>
+        </div>
+    </div>
+    <div class="form-group row">
+    <label for="passwd" class = "col col-form-label col-4 text-white">Password:</label>
+    <input type="password" class="form-control col" name="passwd" id = "passwd" placeholder="password" oninput="checkpassword()" required>
+    </div>
+    <div class="form-group row">
+        <label for="repasswd" class = "col col-form-label col-4 text-white">Re-type:</label>
+        <div class="col col-lg form-control">
+            <input type="password" class= "form-control" style="padding: 0;" name="repasswd" id = "repasswd" placeholder="password" oninput="checkpassword()" required>
+            <div id = "passmsg" style = "font-size: 12px;  color: red;"></div>
+        </div>
+    </div>
+    <br>
+    <div class="form-group row">
+        <input type="submit" class="col btn btn-success" name="submit" id = "submit" value="Submit" disabled>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,2 +1,2 @@
-# MovieTime-flask
-Flask based project for movie ticketing system
+# Movie-time-flask
+Movie booking application using Flask

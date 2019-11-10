@@ -1,0 +1,38 @@
+{% extends "master.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card mb-3 text-white" style="background-image: linear-gradient(90deg, rgb(0, 0, 0), rgb(70, 70, 70)); max-width: 100%;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img class="card-img img-fluid rounded" src="{{url_for('static', filename = 'img/Movies/'+movie_data[7])}}" alt="Card image cap">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{movie_data[1]}}</h5>
+                <p class="card-text" style="text-transform: capitalize;">Languages: {{movie_data[2]}}<br>
+                Genes: {{movie_data[3]}}<br>
+                Run time: {{movie_data[4]}}<br>  
+                Rating: {{movie_data[5]}}<br></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h5 class="card-header">Today {{data['today'][-2:] + "-" +data['today'][-5:-3]+"-"+data['today'][0:-6]  }}</h5>
+        <div class="card-body">
+          {% for x in show_today %}
+          <a href="{{url_for('user.bookticket_scr',show_id = x[0])}}" class="btn btn-primary">{{x[2]}} - {{x[1]}}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="card">
+        <h5 class="card-header">Today {{data['today1'][-2:] + "-" +data['today1'][-5:-3]+"-"+data['today1'][0:-6]  }}</h5>
+        <div class="card-body">
+          {% for x in show_today1 %}
+          <a href="{{url_for('user.bookticket_scr',show_id = x[0])}}" class="btn btn-primary">{{x[2]}} - {{x[1]}}</a>
+          {% endfor %}
+        </div>
+      </div>
+</div>
+{% endblock %}

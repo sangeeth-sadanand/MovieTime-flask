@@ -1,0 +1,110 @@
+{% extends "master.html" %}
+
+{% block title %}
+page NOT FOUND
+{% endblock %}
+
+{% block head %}
+<style>
+@import url("https://fonts.googleapis.com/css?family=Bevan");
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+p {
+    font-family: "Bevan", cursive;
+    font-size: 130px;
+    margin: 10vh 0 0;
+    text-align: center;
+    letter-spacing: 5px;
+    background-color: black;
+    color: transparent;
+    text-shadow: 5px 5px 1px rgba(0, 0, 0, 0.336);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+
+    span {
+        font-size: 1.2em;
+    }
+}
+
+code {
+    color: #0c0c0c;
+    text-align: center;
+    display: block;
+    font-size: 16px;
+    margin: 0 30px 25px;
+
+    span {
+        color: #f0c674;
+    }
+
+    i {
+        color: #b5bd68;
+    }
+
+    em {
+        color: #b294bb;
+        font-style: unset;
+    }
+
+    b {
+        color: #81a2be;
+        font-weight: 500;
+    }
+}
+
+
+a {
+    color: #8abeb7;
+    font-family: monospace;
+    font-size: 20px;
+    text-decoration: underline;
+    margin-top:10px;
+    display:inline-block
+}
+
+@media screen and (max-width: 880px) {
+    p {
+        font-size: 14vw;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<p>HTTP: <span>500</span></p>
+<code><span>Server Internal error;</span></code>
+<code><span>Our server is on a break;</span>;}</code>
+
+
+
+<script>
+function type(n, t) {
+    var str = document.getElementsByTagName("code")[n].innerHTML.toString();
+    var i = 0;
+    document.getElementsByTagName("code")[n].innerHTML = "";
+
+    setTimeout(function() {
+        var se = setInterval(function() {
+            i++;
+            document.getElementsByTagName("code")[n].innerHTML =
+                str.slice(0, i) + "|";
+            if (i == str.length) {
+                clearInterval(se);
+                document.getElementsByTagName("code")[n].innerHTML = str;
+            }
+        }, 10);
+    }, t);
+}
+
+type(0, 0);
+type(1, 600);
+type(2, 1300);
+
+</script>
+{% endblock %}

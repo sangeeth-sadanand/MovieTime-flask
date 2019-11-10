@@ -1,0 +1,64 @@
+{%extends 'master.html'%}
+
+{% block content %}
+<div class="container">
+    <h2>Movies</h2>  
+    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+    <br>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th></th>
+            <th></th>
+            <th>Name</th>
+            <th>Languages</th>
+            <th>Genes</th>
+            <th>Run time</th>
+            <th>Rating</th>
+            <th>Status</th>
+            <th>Release data</th>
+            <th>Poster thumbnail</th>
+          </tr>
+        </thead>
+        <tbody id="myTable">
+          {%for x in data%}
+          <tr>
+            <td>{{x[0]}}</td>
+            <td><a href="{{url_for('admin.admin_manage_movie_edit',id = x[0])}}">Edit</a></td>
+            <td><a href="{{url_for('admin.admin_manage_movie_delete',id = x[0])}}">Delete</a></td>
+            <td>{{x[1]}}</td>
+            <td>{{x[2]}}</td>
+            <td>{{x[3]}}</td>
+            <td>{{x[4]}}</td>
+            <td>{{x[5]}}</td>
+            {%if x[6] == 1: %}
+              <td>Coming Soon</td>
+            {%elif x[6] == 0: %}
+              <td>Now Showing</td>
+            {%else:%}
+              <td>Old</td>
+            {%endif%}
+            <td>{{x[8]}}</td>
+            <td><img src="{{url_for('static', filename = 'img/Movies/'+x[7])}}" height= 32px></td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
+    <button class="btn btn-dark" onclick="window.location.href='{{url_for('admin.admin_manage_movie_add')}}'">Add new movie</button>
+  </div>
+  
+  <script>
+  $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+  </script>
+{% endblock %}
+  

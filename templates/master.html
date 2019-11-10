@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <title>
+            {% block title %}
+            Movie Time
+            {% endblock %}    
+        </title>
+        
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href= "{{ url_for('static', filename = 'css/additional.css')}}"/>
+        <link rel="stylesheet" href = "{{ url_for('static', filename = 'css/bootstrap.css')}}" />
+        <script type = "text/javascript" src= "{{ url_for('static', filename = 'script/jquery.min.js')}}" ></script>
+        <script type = "text/javascript" src= "{{ url_for('static', filename = 'script/popper.min.js')}}" ></script>
+        <script type = "text/javascript" src= "{{ url_for('static', filename = 'script/bootstrap.js')}}"></script>
+        <link rel="icon" href="{{ url_for('static', filename = 'img/app/favicon.ico')}}" type="image/x-icon"/>
+        <link rel="shortcut icon" href="{{ url_for('static', filename = 'img/app/favicon.ico')}}" type="image/x-icon"/>
+        <script>
+                $(document).ready(function(){
+                    setTimeout(function(){
+                        $(".toast").toast('show');
+                    }, 1000);
+                    
+                });
+        </script>
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+                <a class="navbar-brand" href="{{url_for('home')}}">
+                    <img src ="{{ url_for('static', filename = 'img/app/movietime_logo.png')}}" width = 80px ><span style ='font-family: cursive;'> Movie Time</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#movieTimeNavbar" aria-controls="movieTimeNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="movieTimeNavbar">
+                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{url_for('home')}}">Home</a>
+                    </li>
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Now showing</button>
+                        <div class="dropdown-menu">
+                        {% for d in session.get('now_showing') %}
+                            <a class="dropdown-item bg-white text-black" href="{{url_for('book_now', id = d[0])}}">{{d[1]}}</a>
+                        {% endfor %}
+                        </div>
+                    </div> 
+                    {% block nav_item %}
+                    {% endblock %}
+                    </ul>
+                    <ul class="navbar-nav" style="padding-right:50px ;">
+                    {% if not session.get('login') %}
+                    <li class="nav-item">
+                    <form class="form-inline my-2 my-lg-0" method ="GET" action = "{{url_for('login')}}">
+                    <button class="btn btn-success my-2 my-sm-0" type="submit">Login</button></form>
+                    {% else %}
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                              Hello {{session['login_username']}}
+                            </button>
+                            <div class="dropdown-menu">
+                            {% if session.get('login_type') == 'admin' %}
+                            <a class="dropdown-item bg-primary text-white" href="{{url_for('admin.admin_home')}}"><b>Admin page</b></a>
+                            <a class="dropdown-item" href="{{url_for('admin.admin_manage_movie_show')}}">Manage movies</a>
+                            <a class="dropdown-item" href="{{url_for('admin.admin_showtime_show')}}">Manage showtime</a>
+                            <a class="dropdown-item" href="{{url_for('admin.admin_bill')}}">View bill</a>
+                            <a class="dropdown-item" href="{{url_for('admin.staff_show')}}">Manage staff</a>
+                            
+                            {% elif session.get('login_type') == 'staff' %}
+                            <a class="dropdown-item" href="{{url_for('booked_ticket')}}"><b>Booked ticket</b></a>
+                            <a class="dropdown-item" href="{{url_for('user.staff_print')}}"><b>Print ticket</b></a>
+                            {% elif session.get('login_type') == 'user' %}
+                            <a class="dropdown-item" href="{{url_for('booked_ticket')}}"><b>Booked ticket</b></a>
+                            {% endif %}
+                            <a class="dropdown-item" href="{{url_for('view_profile')}}">View profile</a>
+                            <a class="dropdown-item text-danger" href="{{url_for('logout')}}">Logout</a>
+                            </div>
+                        </div> 
+                    {% endif %}
+                    </li>
+                    <li class="nav-item"> </li>
+                    </ul>
+                </div>
+            </nav>
+            
+        </header>
+        <article><br><br><br><br>
+            {% block content %}
+            {{session['login']}}
+            {% endblock %}
+        </article>
+        <br><br><br><br><br>
+        <br><br><br><br><br><br><br><br>
+        <div aria-live="polite" aria-atomic="true" style="position: absolute; bottom:0; right: 0px;min-width:300px; min-height: 200px;">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for cat,message in messages %}
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay ="5000">
+            
+                {% if cat == 'error' %}
+                <div class="toast-header  bg-dark">
+                <strong class="mr-auto text-danger">Error</strong>
+                {% elif cat == 'success' %}
+                <div class="toast-header  bg-dark">
+                <strong class="mr-auto text-success bg-dark">Success</strong>
+                {% else %}
+                <div class="toast-header  bg-dark">
+                <strong class="mr-auto text-info bg-dark">Message</strong>
+                {% endif %}
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true" class = "text-white">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                {{message}}
+            </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+
+
+
+        <footer class = "container">
+            {% block footer %}
+            {% endblock %}
+            <div class="row col-12">
+                <h2>Contact:</h2>
+            </div>
+            <hr style = 'border: 2px solid #8c8b8b;'>
+            <div class = "row">
+                <div class="col">
+                    <img src ="{{ url_for('static', filename = 'img/app/movietime_logo.png')}}" width = 128px><br/>
+                    <h3 style ='font-family: cursive;'>Movie Time</h3>
+                </div>
+                <div class ="col">
+                    <img src ="{{ url_for('static', filename = 'img/app/address_icon.gif')}}" width = 50px><br> Movie Time complex,<br>Street xyz,<br>
+                        Location<br>
+                        pin.<br>
+                </div>
+                <div class = "col">
+                    <img src ="{{ url_for('static', filename = 'img/app/Contact_icon.gif')}}" width = 32px> +91-xxxxx xxxxx<br> <br>
+                    <img src ="{{ url_for('static', filename = 'img/app/Mail_icon.gif')}}" width = 32px> somemail@movietime.com
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

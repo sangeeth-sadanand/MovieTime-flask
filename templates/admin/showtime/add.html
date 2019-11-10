@@ -1,0 +1,165 @@
+{% extends "master.html" %}
+{% block content %}
+<script>
+function setmovieoptions(){
+    var movielist = document.getElementById('movie_name');
+    var languages = document.getElementById('languages');
+    var language = {};
+    var runtime ={};
+    var movie = movielist.options[movielist.selectedIndex].value;
+    {% for x,y in movie_data.items()%} language['{{x}}'] = ['{{y[2][0]}}'{% for m in range(1,y[2]|length )%} ,'{{y[2][m]}}' {% endfor %} ];{% endfor %}
+    {% for x,y in movie_data.items()%} runtime['{{x}}'] = "{{y[1]}}";{% endfor %}
+    while (languages.options.length) {
+    languages.remove(0);
+    }
+    var lang = language[movie];
+    var run = runtime[movie];
+    if (lang){
+        var i;
+        for(i=0;i<lang.length;i++){
+            var n= new Option(lang[i],lang[i]);
+            languages.options.add(n);
+        }
+    }
+    document.getElementById('run_time').readonly =false;
+    document.getElementById('run_time').value = run;
+    document.getElementById('run_time').readonly =true;
+    }
+
+    function computetotime(){
+        var fromtime = document.getElementById("start_time").value.split(':');
+        var run_t = document.getElementById("run_time").value;
+        var break_t = document.getElementById("break_time").value;
+        var gap_t =document.getElementById("gap_time").value;
+        var totime = new Date();
+        totime.setHours(fromtime[0]);
+        var x = Number(fromtime[1])+Number(run_t)+Number(break_t)+Number(gap_t);
+        totime.setMinutes(x);
+        var data = addZero(totime.getHours())+":"+addZero(totime.getMinutes());
+        document.getElementById("end_time").value = data;
+    }
+    function addZero(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+    }
+
+    function checkSeatAvailability(){
+        computetotime()
+        var xmlHttp;
+        var screen = document.getElementById("screen").value;
+        var start_time = document.getElementById("start_time").value;
+        var end_time = document.getElementById("end_time").value;
+        var date =document.getElementById("date").value;
+
+        try
+            {    // Firefox, Opera 8.0+, Safari    
+                xmlHttp=new XMLHttpRequest();    
+            }
+        catch (e)
+            {    // Internet Explorer    
+                try
+            {      
+                xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");   
+            }
+            catch (e)
+            {      
+                try
+                {        
+                    xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");        
+                }
+                catch (e)
+                {        
+                    alert("Your browser does not support AJAX!");        
+                    return false;        
+                }      
+            }    
+            }
+            xmlHttp.onreadystatechange=function()
+            {
+                 if(xmlHttp.readyState==4)
+                {
+                    var response = xmlHttp.responseText.trim();
+                    if (response == 'true')
+                    {
+                        document.getElementById("avimsg").innerHTML = "This timing is available for the show. ";
+                        document.getElementById("avimsg").style.color = 'DarkGreen';
+                        document.getElementById("submit").disabled =false;
+                    }
+                    else
+                    {
+                        document.getElementById("avimsg").innerHTML = "Timing not available for the show"
+                        document.getElementById("avimsg").style.color = "red";
+                        document.getElementById("submit").disabled =true
+                    }
+                }
+            }
+            xmlHttp.open("GET",'/ajax/showtime?screen='+screen+'&start_time='+start_time+'&end_time='+end_time+'&date='+date ,true);
+            xmlHttp.send(null);  
+    }
+</script>
+<div class="container">
+    <div class="d-flex justify-content-center flex-row mb-3">
+        <div class="p-2 bd-highlight"><h1 class="text-black">Add show time screen {{data['screen']}}</h1></div>
+    </div>
+    <form class = "form-horizontal" method = 'POST' enctype="multipart/form-data">
+        <input type="hidden" name = "screen" id="screen" value="{{data['screen']}}">
+        <div class="form-group row">
+            <label for="movie_name" class="col-sm-2 col-form-label">Movie: </label>
+                <select class="custom-select col-sm-10" name='movie' id="movie_name" onchange = "setmovieoptions()" required>
+                    <option>Select</option>
+                    {% for x, y in movie_data.items() %}
+                    <option value="{{x}}">{{y[0]}}</option>
+                    {% endfor %}
+                </select>
+        </div>
+        <div class="form-group row">
+            <label for="date" class="col-sm-2 col-form-label">Date:</label>
+            <input type="date" class="form-control col-sm-10" name = "date" id="date" value = {{data['date']}} readonly>
+        </div>
+        <div class="form-group row">
+            <label for="languages" class="col-sm-2 col-form-label">Language: </label>
+            <select class="custom-select col-sm-10" name='language' id="languages" required></select>
+        </div>
+        <div class="form-group row">
+            <label for="start_time" class="col-sm-2 col-form-label">Start time: </label>
+            <input type=time class="col form-control" name="start_time" id="start_time" oninput ="computetotime()" value ="09:00" required>
+            <label for="run_time" class="col-sm-2 col-form-label">Run time: </label>
+            <input type=number class="col form-control" name="run_time" id="run_time" value = 0 min= 0 readonly>
+            <label for="break_time" class="col-sm-2 col-form-label">Break time: </label>
+            <input type=number class="col form-control" name="break_time" id="break_time" value = 15 min= 0 max=30 oninput ="computetotime()" required>
+        </div>
+    
+        <div class="form-group row">
+            <label for="gap_time" class="col-sm-2 col-form-label">Gap time: </label>
+            <input type=number class="col form-control" name="gap_time" id="gap_time" min= 0 value= 15 oninput ="computetotime()" max=45 required>
+            <label for="end_time" class="col-sm-2 col-form-label">End time: </label>
+            <input type=time class="col form-control" name="end_time" id="end_time" oninput ="computetotime()" value= "11:00"required readonly>
+            <div class="col-1"></div>
+            <button class="form-control col-sm-3 bg-dark text-light" type="button" onclick = "checkSeatAvailability()">Check availability</button>
+        </div>
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col"  id = "avimsg"></div>
+        </div>
+        <div style ="padding: 20px; border: 1px solid black; border-radius: 10px;">
+            <div class="col" style="padding: 5px; "><b><u>Price</u></b></div>
+            <div class="form-group row">
+                <label for="plat" class="col-sm-2 col-form-label">Platinum: </label>
+                <input type=number class="col form-control" name="plat" id="plat" value=230 min= 0 required>
+                <label for="gold" class="col-sm-2 col-form-label">Gold: </label>
+                <input type=number class="col form-control" name="gold" id="Gold" value = 180 min= 0 required>
+                <label for="silv" class="col-sm-2 col-form-label">Silver: </label>
+                <input type=number class="col form-control" name="silv" id="silv" value = 150 min= 0 required>
+            </div>
+        </div>
+        <br>  
+        <div class="form-group row">
+            <div class="col-sm-4 col-form-label"></div>
+            <input class="col-sm-4 btn btn-success" type="submit" id="submit" class="form-control col-sm-10" value="Submit" onclick = "computetotime()" disabled>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
